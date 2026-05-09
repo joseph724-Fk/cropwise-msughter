@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CropWise Offline</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --green: #2D6A4F;
+            --dark: #1B4332;
+            --gold: #F4A261;
+            --bg: #F8FAF7;
+            --muted: #6B7280;
+            --border: #E5E7EB;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at top right, rgba(244, 162, 97, 0.22), transparent 30%),
+                linear-gradient(135deg, #F8FAF7, #EEF7F1);
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--dark);
+            padding: 24px;
+        }
+
+        .offline-card {
+            width: min(520px, 100%);
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 34px;
+            box-shadow: 0 24px 70px rgba(29, 53, 87, 0.12);
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 22px;
+            background: var(--green);
+            color: white;
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0 0 12px;
+            font-size: clamp(2rem, 8vw, 3rem);
+            line-height: 1;
+        }
+
+        p {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .status {
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 18px;
+            background: #E9F5EF;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            border: 0;
+            border-radius: 18px;
+            padding: 15px 18px;
+            background: var(--green);
+            color: white;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <main class="offline-card">
+        <div class="logo">CW</div>
+        <h1>You are offline</h1>
+        <p>
+            CropWise cannot reach the server right now. Cached pages may still work, and farm records created offline will be saved on this device until your connection returns.
+        </p>
+        <div class="status">
+            Offline Mode Active
+        </div>
+        <button onclick="window.location.reload()">Try Again</button>
+    </main>
+</body>
+</html>

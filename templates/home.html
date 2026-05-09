@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="public-home-hero">
+    <div class="public-home-nav">
+        <a href="{{ url_for('home.home') }}" class="public-brand">
+            <span>CW</span>
+            <strong>CropWise</strong>
+        </a>
+
+        <nav>
+            <a href="#seasonal">Best Crops</a>
+            <a href="#about">About</a>
+            <a href="{{ url_for('auth.login') }}">Login</a>
+            <a href="{{ url_for('auth.signup') }}" class="public-nav-btn">Create Account</a>
+        </nav>
+    </div>
+
+    <div class="public-hero-grid">
+        <div>
+            <p class="eyebrow">Smart Crop Advisory</p>
+            <h1>Best crops to plant in {{ month_name }}.</h1>
+            <p class="muted public-lead">
+                CropWise helps smallholder farmers choose better crops using season, water needs, soil suitability, yield data, and farm tracking.
+            </p>
+
+            <div class="public-hero-actions">
+                <a href="{{ url_for('auth.signup') }}" class="btn primary md-button">Start Tracking Crops</a>
+                <a href="#seasonal" class="btn ghost">View Recommended Crops</a>
+            </div>
+
+            <p class="developer-line">
+                Designed & Developed by <strong>Msughter Sulega</strong>
+            </p>
+        </div>
+
+        <div class="public-season-card">
+            <span class="season-label">Current Season Insight</span>
+            <h2>{{ month_name }} Planting Guide</h2>
+            <p>
+                These recommendations are generated automatically from the current month and crop database.
+            </p>
+            <div class="season-metric">
+                <strong>{{ best_crops|length }}</strong>
+                <span>Top crops available now</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-head" id="seasonal">
+    <div>
+        <p class="eyebrow">Seasonal Recommendation</p>
+        <h2>Best crops to plant now</h2>
+        <p class="muted">
+            Ranked for {{ month_name }} using planting month, water suitability, and yield reliability.
+        </p>
+    </div>
+</section>
+
+{% if best_crops %}
+<div class="grid">
+    {% for item in best_crops %}
+        {% set crop = item.crop %}
+        <article class="crop-card">
+            <div class="crop-image">
+                {% if crop.image_filename %}
+                    <img src="{{ url_for('static', filename='images/crops/' ~ crop.image_filename) }}" alt="{{ crop.common_name }}">
+                {% else %}
+                    <span>{{ crop.common_name[:1] }}</span>
+                {% endif %}
+            </div>
+
+            <div class="card-body">
+                <p class="category">{{ crop.category }}</p>
+                <h3>{{ crop.common_name }}</h3>
+                <p class="muted">{{ crop.botanical_name }}</p>
+                <p><strong>Water:</strong> {{ crop.water_requirement|title }}</p>
+                <p><strong>Harvest:</strong> {{ crop.harvest_weeks }} weeks</p>
+                <p><strong>Season Score:</strong> {{ (item.score * 100)|round }}%</p>
+
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('crops.crop_detail', crop_uuid=crop.uuid) }}" class="btn primary">View Details</a>
+                {% else %}
+                    <a href="{{ url_for('auth.signup') }}" class="btn primary">Track This Crop</a>
+                {% endif %}
+            </div>
+        </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty">
+    <h3>No seasonal crop data yet.</h3>
+    <p>Seed the crop database so CropWise can show current recommendations.</p>
+</div>
+{% endif %}
+
+<section class="about-project-section" id="about">
+    <div class="about-hero-block">
+        <p class="eyebrow">About Project</p>
+        <h2>CropWise is built for smarter smallholder farming.</h2>
+        <p>
+            CropWise is a smart crop advisory and farm management platform designed to help farmers make better planting decisions. It recommends crops using seasonal timing, crop water needs, expected yield, and soil compatibility.
+        </p>
+    </div>
+
+    <div class="about-grid">
+        <article class="panel about-card">
+            <p class="eyebrow">What CropWise Does</p>
+            <h3>Seasonal Crop Advisory</h3>
+            <p>
+                Visitors immediately see the best crops to plant at the current time of the year. Registered farmers get more personal recommendations based on LGA and soil type.
+            </p>
+        </article>
+
+        <article class="panel about-card">
+            <p class="eyebrow">Farm Management</p>
+            <h3>Personal Crop Tracking</h3>
+            <p>
+                Farmers can record planted crops, planting dates, expected harvest dates, and crop status. Offline mode allows farm records to be saved locally and synced when internet returns.
+            </p>
+        </article>
+
+        <article class="panel about-card">
+            <p class="eyebrow">About Developer</p>
+            <h3>Msughter Sulega</h3>
+            <p>
+                CropWise was designed and developed by Msughter Sulega, a Computer Science Student and ML & IoT Enthusiast.
+            </p>
+        </article>
+
+        <article class="panel about-card">
+            <p class="eyebrow">Technology</p>
+            <h3>Python Flask + MySQL</h3>
+            <p>
+                The platform uses Flask, MySQL, HTML, CSS, JavaScript, rule-based advisory logic, and PWA offline support.
+            </p>
+        </article>
+    </div>
+</section>
+{% endblock %}

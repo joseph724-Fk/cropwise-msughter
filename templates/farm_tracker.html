@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-head">
+    <div>
+        <p class="eyebrow">Farm Tracker</p>
+        <h1>Your farm records</h1>
+        <p class="muted">
+            Track planted crops, expected harvest dates, fertilizer timing, and weeding reminders.
+        </p>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>Add Farm Record</h2>
+    <p class="muted">
+        Choose a crop and planting date. CropWise will calculate the expected harvest date and care schedule.
+    </p>
+
+    <div class="ajax-alert"></div>
+
+    <form method="POST"
+          action="{{ url_for('farm.add_farm_record') }}"
+          class="farm-form ajax-form offline-farm-form"
+          data-reload="true">
+
+        <select name="crop_uuid" required>
+            <option value="">Select crop…</option>
+            {% for crop in crops %}
+                <option value="{{ crop.uuid }}">{{ crop.common_name }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="date" name="date_planted" required>
+
+        <input type="text" name="notes" placeholder="Optional notes">
+
+        <button class="btn primary" type="submit">
+            <span class="btn-text">Add Record</span>
+            <span class="btn-loader"></span>
+        </button>
+    </form>
+</section>
+
+<section class="farm-records-section">
+    {% if records %}
+        <div class="farm-record-grid">
+            {% for record in records %}
+                <article class="farm-record-card">
+                    <div class="farm-record-head">
+                        <div>
+                            <p class="eyebrow">{{ record.crop.category }}</p>
+                            <h2>{{ record.crop.common_name }}</h2>
+                            <p class="muted">{{ record.notes or "No notes added." }}</p>
+                        </div>
+
+                        <span class="badge {{ record.status }}">
+                            {{ record.status|title }}
+                        </span>
+                    </div>
+
+                    <div class="farm-record-meta">
+                        <div>
+                            <span>Date Planted</span>
+                            <strong>{{ record.date_planted.strftime('%b %d, %Y') }}</strong>
+                        </div>
+
+                        <div>
+                            <span>Expected Harvest</span>
+                            <strong>{{ record.expected_harvest.strftime('%b %d, %Y') }}</strong>
+                        </div>
+
+                        <div>
+                            <span>Water Need</span>
+                            <strong>{{ record.crop.water_requirement|title }}</strong>
+                        </div>
+                    </div>
+
+                    <form method="POST"
+                          action="{{ url_for('farm.update_farm_status', record_uuid=record.uuid) }}"
+                          class="inline-form ajax-form"
+                          data-reload="true">
+
+                        <select name="status">
+                            <option value="active" {% if record.status == "active" %}selected{% endif %}>Active</option>
+                            <option value="harvested" {% if record.status == "harvested" %}selected{% endif %}>Harvested</option>
+                            <option value="failed" {% if record.status == "failed" %}selected{% endif %}>Failed</option>
+                        </select>
+
+                        <button class="btn small" type="submit">Save Status</button>
+                    </form>
+
+                    <div class="care-schedule-box">
+                        <div class="care-schedule-head">
+                            <div>
+                                <strong>Crop Care Schedule</strong>
+                                <span>Fertilizer and weeding reminders</span>
+                            </div>
+                        </div>
+
+                        {% set tasks = record_care_tasks.get(record.uuid, []) %}
+
+                        {% if tasks %}
+                            <div class="care-task-list">
+                                {% for task in tasks[:8] %}
+                                    <div class="care-task {{ task.status }}">
+                                        <div>
+                                            <strong>{{ task.type }}</strong>
+                                            <span>{{ task.label }}</span>
+                                        </div>
+
+                                        <div class="care-date">
+                                            <strong>{{ task.due_date.strftime('%b %d, %Y') }}</strong>
+
+                                            {% if task.status == "overdue" %}
+                                                <span class="danger-text">Overdue by {{ task.days_left|abs }} day(s)</span>
+                                            {% elif task.status == "due-today" %}
+                                                <span class="success-text">Due today</span>
+                                            {% else %}
+                                                <span>{{ task.days_left }} day(s) left</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            {% if record.crop.care_notes %}
+                                <p class="care-note">{{ record.crop.care_notes }}</p>
+                            {% endif %}
+                        {% else %}
+                            <p class="muted">No care schedule available for this crop yet.</p>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty">
+            <h3>No farm records yet.</h3>
+            <p>Add your first planted crop above.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

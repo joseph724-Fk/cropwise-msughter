@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title or "CropWise — by Msughter Sulega" }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ request.url }}">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "CropWise",
+      "url": "{{ request.url_root }}",
+      "description": "Smart Crop Advisory & Farm Management Platform for smallholder farmers in Lagos State, Nigeria.",
+      "applicationCategory": "EducationalApplication",
+      "author": { "@type": "Person", "name": "Msughter Sulega" }
+    }
+    </script>
+
+    <meta name="description"       content="Smart Crop Advisory & Farm Management Platform for smallholder farmers in Lagos State, Nigeria.">
+    <meta name="author"            content="Msughter Sulega">
+    <meta name="creator"           content="Msughter Sulega">
+    <meta name="application-name"  content="CropWise">
+    <meta name="keywords"          content="CropWise, smart farming, crop advisory, Lagos agriculture, Msughter Sulega">
+
+    <meta property="og:type"        content="website">
+    <meta property="og:title"       content="CropWise — by Msughter Sulega">
+    <meta property="og:description" content="Smart Crop Advisory & Farm Management Platform">
+    <meta property="og:site_name"   content="CropWise">
+    <meta property="og:locale"      content="en_NG">
+
+    <meta name="twitter:card"        content="summary">
+    <meta name="twitter:title"       content="CropWise — by Msughter Sulega">
+    <meta name="twitter:description" content="Smart Crop Advisory & Farm Management Platform">
+
+    <meta name="theme-color"                        content="#2D6A4F">
+    <meta name="mobile-web-app-capable"             content="yes">
+    <meta name="apple-mobile-web-app-capable"       content="yes">
+    <meta name="apple-mobile-web-app-title"         content="CropWise">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="manifest"       href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="icon"           type="image/svg+xml" href="{{ url_for('static', filename='icons/cropwise-icon.svg') }}">
+    <link rel="shortcut icon"  type="image/svg+xml" href="{{ url_for('static', filename='icons/cropwise-icon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/cropwise-icon.svg') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Instant theme apply — before any paint -->
+    <script>
+        (function(){
+            var t = localStorage.getItem('cropwise_theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+</head>
+
+<body class="app-body">
+
+<!-- ── SPLASH SCREEN ─────────────────────────────────────────────────────── -->
+<div id="appSplash" class="app-splash">
+    <div class="splash-card">
+        <div class="splash-logo">
+            <img src="{{ url_for('static', filename='icons/cropwise-icon.svg') }}" alt="CropWise">
+        </div>
+        <div class="splash-copy">
+            <h1>CropWise</h1>
+            <p>Smart Agricultural Advisory</p>
+            <span>Developed by Msughter Sulega</span>
+        </div>
+        <div class="splash-loader">
+            <i></i><i></i><i></i>
+        </div>
+    </div>
+</div>
+
+{% if current_user.is_authenticated %}
+
+<!-- ── AUTHENTICATED LAYOUT ──────────────────────────────────────────────── -->
+<button id="mobileMenuBtn" class="floating-menu-btn" type="button" title="Open menu">☰</button>
+
+<aside class="sidebar" id="appSidebar">
+    <div class="sidebar-header">
+        <a href="{{ url_for('dashboard.dashboard') }}" class="brand">
+            <span class="brand-mark">
+                <img src="{{ url_for('static', filename='icons/cropwise-icon.svg') }}"
+                     alt="CW" width="20" height="20">
+            </span>
+            <span class="brand-text">CropWise</span>
+        </a>
+        <button class="pin-toggle" id="pinSidebarBtn" type="button" title="Pin sidebar">📌</button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <a href="{{ url_for('dashboard.dashboard') }}" class="nav-item">
+            <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                </svg>
+            </span>
+            <span class="nav-text">Dashboard</span>
+        </a>
+
+        <a href="{{ url_for('crops.crops') }}" class="nav-item">
+            <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2c-1.5 3-4 5.5-4 9a4 4 0 008 0c0-3.5-2.5-6-4-9z"/>
+                    <line x1="12" y1="15" x2="12" y2="22"/>
+                    <path d="M9 18c1 .5 2 .8 3 .8s2-.3 3-.8"/>
+                </svg>
+            </span>
+            <span class="nav-text">Crop Library</span>
+        </a>
+
+        <a href="{{ url_for('farm.farm_tracker') }}" class="nav-item">
+            <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+                    <rect x="9" y="3" width="6" height="4" rx="1"/>
+                    <line x1="9" y1="12" x2="15" y2="12"/>
+                    <line x1="9" y1="16" x2="13" y2="16"/>
+                </svg>
+            </span>
+            <span class="nav-text">Farm Tracker</span>
+        </a>
+
+        <a href="{{ url_for('community.community_page') }}" class="nav-item">
+            <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                </svg>
+            </span>
+            <span class="nav-text">LGA Chat</span>
+        </a>
+
+        <a href="{{ url_for('about.about') }}" class="nav-item">
+            <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="8.01"/>
+                    <line x1="12" y1="11" x2="12" y2="17"/>
+                </svg>
+            </span>
+            <span class="nav-text">About Project</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <a href="{{ url_for('auth.logout') }}" class="nav-item text-danger">
+            <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+            </span>
+            <span class="nav-text">Logout</span>
+        </a>
+    </div>
+</aside>
+
+<div class="main-wrapper">
+    <header class="app-topbar">
+        <div class="topbar-left">
+            <a href="{{ url_for('dashboard.dashboard') }}" class="topbar-logo">
+                <img src="{{ url_for('static', filename='icons/cropwise-icon.svg') }}"
+                     alt="CW" width="22" height="22">
+            </a>
+            <div>
+                <strong>CropWise</strong>
+                <small>Built by Msughter Sulega</small>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <!-- Dark mode toggle -->
+            <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="Toggle dark mode">
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
+
+            <!-- User menu -->
+            <div class="user-menu" id="userMenu">
+                <button class="user-menu-btn" id="userMenuBtn" type="button">
+                    <span class="user-avatar">
+                        {{ current_user.full_name[:1].upper() if current_user.full_name else 'U' }}
+                    </span>
+                    <span class="user-meta">
+                        <strong>{{ current_user.first_name }}</strong>
+                        <small>{{ current_user.lga }} • {{ current_user.soil_type|title }}</small>
+                    </span>
+                    <span class="chevron">⌄</span>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <!-- Greeting shown on mobile where user-meta is hidden -->
+                    <div class="user-dropdown-greeting">
+                        <strong>Hi, {{ current_user.first_name }} 👋</strong>
+                        <small>{{ current_user.lga }} • {{ current_user.soil_type|title }}</small>
+                    </div>
+                    <a href="{{ url_for('profile.account') }}">Profile Settings</a>
+                    <a href="{{ url_for('profile.account') }}#location">Change Location</a>
+                    <a href="{{ url_for('profile.account') }}#password">Update Password</a>
+                    <a href="{{ url_for('auth.logout') }}" class="danger-link">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-wrap">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main class="page">
+
+{% else %}
+
+<!-- ── PUBLIC LAYOUT ─────────────────────────────────────────────────────── -->
+<nav class="public-nav">
+    <a href="/" class="nav-brand">
+        <span class="brand-mark">
+            <img src="{{ url_for('static', filename='icons/cropwise-icon.svg') }}"
+                 alt="CW" width="20" height="20">
+        </span>
+        CropWise
+    </a>
+
+    <div style="display:flex;align-items:center;gap:8px;margin-left:auto;">
+        <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="Toggle dark mode">
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </button>
+
+        <button class="public-mobile-toggle" id="publicMobileToggle" type="button" aria-label="Menu">☰</button>
+    </div>
+
+    <div class="nav-links" id="publicNavLinks">
+        <a href="/">Home</a>
+        <a href="{{ url_for('about.about') }}">About</a>
+        <a href="{{ url_for('auth.login') }}">Sign In</a>
+        <a href="{{ url_for('auth.signup') }}" class="nav-cta">Get Started</a>
+    </div>
+</nav>
+
+<div class="public-page-wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-wrap">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <main class="page">
+
+{% endif %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="{{ url_for('static', filename='icons/cropwise-icon.svg') }}"
+                         alt="CropWise" width="32" height="32">
+                </div>
+                <div class="footer-brand-copy">
+                    <h3>CropWise</h3>
+                    <p>Smart Crop Advisory &amp; Farm Management System for smallholder farmers in Lagos State, Nigeria.</p>
+                    <p class="footer-credit">
+                        Designed &amp; Developed by <strong>Msughter Sulega</strong><br>
+                        Computer Science Student | ML &amp; IoT Enthusiast
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Platform</h4>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
+                        <a href="{{ url_for('crops.crops') }}">Crop Library</a>
+                        <a href="{{ url_for('farm.farm_tracker') }}">Farm Tracker</a>
+                        <a href="{{ url_for('community.community_page') }}">LGA Chat</a>
+                        <a href="{{ url_for('about.about') }}">About Project</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}">Dashboard</a>
+                        <a href="{{ url_for('auth.login') }}">Crop Library</a>
+                        <a href="{{ url_for('auth.login') }}">Farm Tracker</a>
+                    {% endif %}
+                </div>
+                <div class="footer-col">
+                    <h4>Coverage</h4>
+                    <span>Ikorodu LGA</span>
+                    <span>Epe LGA</span>
+                    <span>Badagry LGA</span>
+                </div>
+                <div class="footer-col">
+                    <h4>Project</h4>
+                    <span>Academic Prototype</span>
+                    <span>Python Flask</span>
+                    <span>MySQL Database</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; {{ current_year or 2026 }} CropWise. Built by <strong>Msughter Sulega</strong>.</p>
+            <p>Smart Crop Advisory &amp; Farm Management Platform.</p>
+        </div>
+    </footer>
+
+{% if current_user.is_authenticated %}
+
+</div><!-- /main-wrapper -->
+
+<!-- Chatbot -->
+<div class="bot-widget" id="botWidget">
+    <button class="bot-fab" id="botFab" type="button">💬</button>
+    <section class="bot-panel" id="botPanel">
+        <div class="bot-head">
+            <div>
+                <strong>CropWise Assistant</strong>
+                <span>Ask about crops, soil, water &amp; harvest.</span>
+            </div>
+            <button type="button" id="botCloseBtn">×</button>
+        </div>
+        <div class="bot-messages" id="botMessages">
+            <div class="bot-message assistant">
+                <p>Hi {{ current_user.first_name }} 👋 Ask me what to plant, or about any crop in the database.</p>
+            </div>
+        </div>
+        <form class="bot-form" id="botForm">
+            <input type="text" name="message" id="botInput" maxlength="500"
+                   placeholder="Ask CropWise…" autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+    </section>
+</div>
+
+{% else %}
+
+</div><!-- /public-page-wrap -->
+
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

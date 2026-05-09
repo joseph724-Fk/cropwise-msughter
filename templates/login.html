@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="auth-stage">
+    <div class="auth-visual">
+        <div class="orb orb-one"></div>
+        <div class="orb orb-two"></div>
+        <div class="glass-copy">
+            <p class="eyebrow">Smart Crop Advisory</p>
+            <h1>Grow better with seasonal crop intelligence.</h1>
+            <p>CropWise recommends crops using planting month, soil type, water needs, and yield reliability.</p>
+        </div>
+    </div>
+
+    <div class="auth-card md-card">
+        <p class="eyebrow">Welcome back</p>
+        <h1>Login to CropWise</h1>
+        <p class="muted">Access your crop recommendations and farm tracker.</p>
+
+        <div class="ajax-alert" id="ajaxAlert"></div>
+
+        <form method="POST" class="form ajax-form" data-redirect="true">
+            <div class="field">
+                <input type="email" name="email" placeholder=" " required>
+                <label>Email Address</label>
+            </div>
+
+            <div class="field">
+                <input type="password" name="password" placeholder=" " required>
+                <label>Password</label>
+            </div>
+
+            <button type="submit" class="btn primary md-button">
+                <span class="btn-text">Login</span>
+                <span class="btn-loader"></span>
+            </button>
+        </form>
+
+        <p class="small-text">
+            No account yet?
+            <a href="{{ url_for('auth.signup') }}">Create one</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

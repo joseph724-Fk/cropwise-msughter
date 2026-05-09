@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="auth-stage">
+    <div class="auth-visual">
+        <div class="orb orb-one"></div>
+        <div class="orb orb-two"></div>
+        <div class="glass-copy">
+            <p class="eyebrow">Lagos Farming Support</p>
+            <h1>Personalised crop planning for smallholder farmers.</h1>
+            <p>Create a farmer profile so CropWise can match recommendations to your LGA and soil type.</p>
+        </div>
+    </div>
+
+    <div class="auth-card md-card">
+        <p class="eyebrow">New farmer account</p>
+        <h1>Create your CropWise account</h1>
+        <p class="muted">Your soil type and LGA help CropWise recommend better crops.</p>
+
+        <div class="ajax-alert" id="ajaxAlert"></div>
+
+        <form method="POST" class="form ajax-form" data-redirect="true">
+            <div class="field">
+                <input type="text" name="full_name" placeholder=" " required>
+                <label>Full Name</label>
+            </div>
+
+            <div class="field">
+                <input type="email" name="email" placeholder=" " required>
+                <label>Email Address</label>
+            </div>
+
+            <div class="field">
+                <input type="password" name="password" minlength="6" placeholder=" " required>
+                <label>Password</label>
+            </div>
+
+            <div class="field select-field">
+                <select name="lga" required>
+                    <option value="">Select LGA</option>
+                    <option value="Ikorodu">Ikorodu</option>
+                    <option value="Epe">Epe</option>
+                    <option value="Badagry">Badagry</option>
+                </select>
+                <label>Lagos LGA</label>
+            </div>
+
+            <div class="field select-field">
+                <select name="soil_type" required>
+                    <option value="">Select soil type</option>
+                    <option value="sandy">Sandy</option>
+                    <option value="loamy">Loamy</option>
+                    <option value="clay">Clay</option>
+                </select>
+                <label>Soil Type</label>
+            </div>
+
+            <button type="submit" class="btn primary md-button">
+                <span class="btn-text">Create Account</span>
+                <span class="btn-loader"></span>
+            </button>
+        </form>
+
+        <p class="small-text">
+            Already have an account?
+            <a href="{{ url_for('auth.login') }}">Login</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

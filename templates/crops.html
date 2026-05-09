@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-head">
+    <div>
+        <p class="eyebrow">Crop Library</p>
+        <h1>Search Lagos-relevant crops</h1>
+    </div>
+</section>
+
+<form method="GET" class="filter-bar">
+    <input type="text" name="q" value="{{ keyword }}" placeholder="Search crop name, botanical name, or description">
+
+    <select name="category">
+        <option value="">All categories</option>
+        {% for category in categories %}
+            <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+        {% endfor %}
+    </select>
+
+    <button class="btn primary" type="submit">Search</button>
+</form>
+
+<div class="grid">
+    {% for crop in crops %}
+    <article class="crop-card">
+        <div class="crop-image">
+            {% if crop.image_filename %}
+                <img src="{{ url_for('static', filename='images/crops/' ~ crop.image_filename) }}" alt="{{ crop.common_name }}">
+            {% else %}
+                <span>{{ crop.common_name[:1] }}</span>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <p class="category">{{ crop.category }}</p>
+            <h3>{{ crop.common_name }}</h3>
+            <p class="muted">{{ crop.botanical_name }}</p>
+            <p><strong>Water:</strong> {{ crop.water_requirement|title }}</p>
+            <a href="{{ url_for('crops.crop_detail', crop_uuid=crop.uuid) }}" class="btn primary">View Details</a>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+
+{% if not crops %}
+<div class="empty">
+    <h3>No crops found.</h3>
+    <p>Try another search keyword or category.</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-page-hero">
+    <p class="eyebrow">About CropWise</p>
+    <h1>Smart Agricultural Advisory Prototype</h1>
+    <p class="muted">
+        CropWise is a smart agricultural advisory platform developed by Msughter Sulega
+        to help Lagos farmers choose suitable crops based on soil type, season, and location.
+    </p>
+</section>
+
+<section class="about-two-sections">
+    <article class="panel about-project-card">
+        <p class="eyebrow">About Project</p>
+        <h2>What CropWise Does</h2>
+
+        <p>
+            CropWise helps smallholder farmers in Lagos State make better planting decisions
+            by recommending suitable crops based on the current season, soil type, water needs,
+            expected yield, and location.
+        </p>
+
+        <p>
+            The platform supports farmers in Ikorodu, Epe, and Badagry LGAs. It includes
+            a crop recommendation dashboard, crop library, crop detail pages, personal farm
+            tracking, and offline-ready farm record support.
+        </p>
+
+        <div class="tech-stack-list">
+            <span>Python Flask</span>
+            <span>MySQL</span>
+            <span>HTML</span>
+            <span>CSS</span>
+            <span>JavaScript</span>
+            <span>ML Concept</span>
+        </div>
+    </article>
+
+    <article class="panel about-developer-card">
+        <div class="developer-photo-wrap">
+            <img src="{{ url_for('static', filename='images/developer/msughter-sulega.jpg') }}" alt="Msughter Sulega">
+        </div>
+
+        <div class="developer-copy">
+            <p class="eyebrow">About Developer</p>
+            <h2>Msughter Sulega</h2>
+
+            <p>
+                Msughter Sulega is a Computer Science Student and ML & IoT Enthusiast.
+                He developed CropWise as an academic prototype to demonstrate how software,
+                agricultural data, and smart advisory logic can support farmers.
+            </p>
+
+            <p>
+                CropWise v1.0 combines Flask, MySQL, HTML, CSS, JavaScript, and rule-based
+                crop recommendation logic to provide practical farming guidance.
+            </p>
+
+            <div class="developer-badges">
+                <span>Computer Science Student</span>
+                <span>ML Enthusiast</span>
+                <span>IoT Enthusiast</span>
+                <span>Smart Agriculture</span>
+            </div>
+
+            <div class="developer-links">
+                <a href="https://github.com/wanusulega/" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://linkedin.com/in/msughter-sulega/" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+        </div>
+    </article>
+</section>
+{% endblock %}

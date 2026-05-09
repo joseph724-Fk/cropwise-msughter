@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-month-hero">
+    <div>
+        <p class="eyebrow">Current Month Advisory</p>
+        <h1>{{ month_name }} crop recommendations for {{ current_user.first_name }}.</h1>
+        <p class="muted">
+            This dashboard only shows crops suitable for the current month, ranked using your soil type, seasonal water conditions, and yield reliability.
+        </p>
+
+        <div class="dashboard-dev-credit">
+            <span>CropWise v1.0</span>
+            <strong>Developed by Msughter Sulega</strong>
+            <small>Computer Science Student | ML & IoT Enthusiast</small>
+        </div>
+    </div>
+
+    <div class="hero-card month-profile-card">
+        <span>Current Month</span>
+        <strong>{{ month_name }}</strong>
+
+        <span>LGA</span>
+        <strong>{{ current_user.lga }}</strong>
+
+        <span>Soil Type</span>
+        <strong>{{ current_user.soil_type|title }}</strong>
+    </div>
+</section>
+
+<section class="section-head">
+    <div>
+        <h2>Best Crops to Plant in {{ month_name }}</h2>
+        <p class="muted">
+            These are not all crops in the database. They are the best current-month matches for your profile.
+        </p>
+    </div>
+
+    <a href="{{ url_for('crops.crops') }}" class="btn ghost">Browse Full Crop Library</a>
+</section>
+
+{% if recommended %}
+<div class="dashboard-recommendation-grid">
+    {% for item in recommended %}
+        {% set crop = item.crop %}
+
+        <article class="month-crop-card">
+            <div class="month-crop-visual">
+                {% if crop.image_filename %}
+                    <img src="{{ url_for('static', filename='images/crops/' ~ crop.image_filename) }}" alt="{{ crop.common_name }}">
+                {% else %}
+                    <span>{{ crop.common_name[:1] }}</span>
+                {% endif %}
+
+                <div class="month-score-pill">
+                    {{ (item.score * 100)|round }}% Match
+                </div>
+            </div>
+
+            <div class="month-crop-body">
+                <p class="category">{{ crop.category }}</p>
+                <h3>{{ crop.common_name }}</h3>
+                <p class="muted scientific-name">{{ crop.botanical_name }}</p>
+
+                <div class="crop-mini-stats">
+                    <div>
+                        <span>Water</span>
+                        <strong>{{ crop.water_requirement|title }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Harvest</span>
+                        <strong>{{ crop.harvest_weeks }} weeks</strong>
+                    </div>
+
+                    <div>
+                        <span>Soil</span>
+                        <strong>{{ crop.soil_type }}</strong>
+                    </div>
+                </div>
+
+                <p class="recommendation-reason">
+                    {{ item.reason }}
+                </p>
+
+                <div class="month-crop-actions">
+                    <a href="{{ url_for('crops.crop_detail', crop_uuid=crop.uuid) }}" class="btn primary">View Details</a>
+                    <a href="{{ url_for('farm.farm_tracker') }}" class="btn ghost">Track Farm</a>
+                </div>
+            </div>
+        </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty current-month-empty">
+    <h3>No current-month recommendation available.</h3>
+    <p>
+        CropWise could not find crops matching {{ month_name }} and your current soil profile.
+        You can update your location or soil type, or browse the full crop library.
+    </p>
+
+    <div class="empty-actions">
+        <a href="{{ url_for('profile.account') }}#location" class="btn primary">Update Soil Profile</a>
+        <a href="{{ url_for('crops.crops') }}" class="btn ghost">Browse Crop Library</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

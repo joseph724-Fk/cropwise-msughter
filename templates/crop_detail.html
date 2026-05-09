@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="detail-layout">
+    <div class="detail-image">
+        {% if crop.image_filename %}
+            <img src="{{ url_for('static', filename='images/crops/' ~ crop.image_filename) }}" alt="{{ crop.common_name }}">
+        {% else %}
+            <span>{{ crop.common_name[:1] }}</span>
+        {% endif %}
+    </div>
+
+    <div class="detail-content">
+        <p class="eyebrow">{{ crop.category }}</p>
+        <h1>{{ crop.common_name }}</h1>
+        <p class="muted"><em>{{ crop.botanical_name }}</em></p>
+
+        <div class="info-grid">
+            <div><span>Soil Type</span><strong>{{ crop.soil_type }}</strong></div>
+            <div><span>Water Requirement</span><strong>{{ crop.water_requirement|title }}</strong></div>
+            <div><span>Harvest Weeks</span><strong>{{ crop.harvest_weeks }}</strong></div>
+            <div><span>Avg Yield</span><strong>{{ crop.avg_yield_kg_per_ha }} kg/ha</strong></div>
+        </div>
+
+        <p>{{ crop.description }}</p>
+
+        <form method="POST" action="{{ url_for('farm.add_farm_record') }}" class="form compact">
+            <input type="hidden" name="crop_uuid" value="{{ crop.uuid }}">
+
+            <label>Date Planted</label>
+            <input type="date" name="date_planted" required>
+
+            <label>Notes</label>
+            <textarea name="notes" rows="3" placeholder="Optional notes about this crop"></textarea>
+
+            <button class="btn primary" type="submit">Add to Farm Tracker</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

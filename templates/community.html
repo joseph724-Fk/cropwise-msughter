@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="community-shell">
+    <div class="community-hero">
+        <div>
+            <p class="eyebrow">LGA Farmers Community</p>
+            <h1>{{ current_user.lga }} Farmers Chat</h1>
+            <p class="muted">
+                Chat with other CropWise farmers in your selected LGA. Share planting updates,
+                ask practical farm questions, and discuss local crop conditions.
+            </p>
+        </div>
+
+        <div class="community-status-card">
+            <span>Current LGA</span>
+            <strong>{{ current_user.lga }}</strong>
+            <small>{{ current_user.soil_type|title }} soil profile</small>
+        </div>
+    </div>
+
+    <section class="community-chat-card">
+        <div class="community-chat-head">
+            <div>
+                <strong>{{ current_user.lga }} Community Room</strong>
+                <span>Messages are visible to farmers in {{ current_user.lga }} only.</span>
+            </div>
+            <button type="button" id="communityRefreshBtn">Refresh</button>
+        </div>
+
+        <div class="community-messages" id="communityMessages">
+            <p class="community-empty">Loading community messages...</p>
+        </div>
+
+        <form class="community-form" id="communityForm">
+            <input type="text" name="message" id="communityInput" maxlength="600" placeholder="Write a message to {{ current_user.lga }} farmers..." autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+    </section>
+</section>
+{% endblock %}

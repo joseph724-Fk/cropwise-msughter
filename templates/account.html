@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-head">
+    <div>
+        <p class="eyebrow">Profile Settings</p>
+        <h1>Manage your CropWise account</h1>
+        <p class="muted">Update your location, soil type, password, or delete your account.</p>
+    </div>
+</section>
+
+<div class="settings-grid">
+    <section class="panel settings-panel" id="location">
+        <h2>Location & Soil Profile</h2>
+        <p class="muted">CropWise uses this information for crop recommendations.</p>
+
+        <div class="ajax-alert"></div>
+
+        <form method="POST" action="{{ url_for('profile.update_location') }}" class="form ajax-form">
+            <div class="field select-field">
+                <select name="lga" id="lgaSelect" required>
+                    <option value="">Select LGA</option>
+                    <option value="Ikorodu" {% if current_user.lga == "Ikorodu" %}selected{% endif %}>Ikorodu</option>
+                    <option value="Epe" {% if current_user.lga == "Epe" %}selected{% endif %}>Epe</option>
+                    <option value="Badagry" {% if current_user.lga == "Badagry" %}selected{% endif %}>Badagry</option>
+                </select>
+                <label>Lagos LGA</label>
+            </div>
+
+            <div class="field select-field">
+                <select name="soil_type" required>
+                    <option value="">Select soil type</option>
+                    <option value="sandy" {% if current_user.soil_type == "sandy" %}selected{% endif %}>Sandy</option>
+                    <option value="loamy" {% if current_user.soil_type == "loamy" %}selected{% endif %}>Loamy</option>
+                    <option value="clay" {% if current_user.soil_type == "clay" %}selected{% endif %}>Clay</option>
+                </select>
+                <label>Soil Type</label>
+            </div>
+
+            <button type="button" class="btn ghost detect-lga-btn" id="detectLgaBtn">Detect my LGA</button>
+            <p class="helper-text" id="lgaDetectStatus">You can select manually or allow browser location detection.</p>
+
+            <button type="submit" class="btn primary md-button">
+                <span class="btn-text">Save Location</span>
+                <span class="btn-loader"></span>
+            </button>
+        </form>
+    </section>
+
+    <section class="panel settings-panel" id="password">
+        <h2>Update Password</h2>
+        <p class="muted">Use a password you can remember but others cannot guess.</p>
+
+        <div class="ajax-alert"></div>
+
+        <form method="POST" action="{{ url_for('profile.update_password') }}" class="form ajax-form">
+            <div class="field">
+                <input type="password" name="current_password" placeholder=" " required>
+                <label>Current Password</label>
+            </div>
+
+            <div class="field">
+                <input type="password" name="new_password" placeholder=" " minlength="6" required>
+                <label>New Password</label>
+            </div>
+
+            <div class="field">
+                <input type="password" name="confirm_password" placeholder=" " minlength="6" required>
+                <label>Confirm New Password</label>
+            </div>
+
+            <button type="submit" class="btn primary md-button">
+                <span class="btn-text">Update Password</span>
+                <span class="btn-loader"></span>
+            </button>
+        </form>
+    </section>
+
+    <section class="panel settings-panel danger-panel">
+        <h2>Delete Account</h2>
+        <p class="muted">This will permanently remove your account and farm records.</p>
+
+        <div class="ajax-alert"></div>
+
+        <form method="POST" action="{{ url_for('profile.delete_account') }}" class="form ajax-form">
+            <div class="field">
+                <input type="password" name="password" placeholder=" " required>
+                <label>Password</label>
+            </div>
+
+            <div class="field">
+                <input type="text" name="confirm_text" placeholder=" " required>
+                <label>Type DELETE</label>
+            </div>
+
+            <button type="submit" class="btn danger-btn">
+                Delete Account
+            </button>
+        </form>
+    </section>
+</div>
+{% endblock %}
